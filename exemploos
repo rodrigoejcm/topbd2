@@ -1,0 +1,22 @@
+
+mysql -h localhost -u guest
+use dvds;
+show tables;
+
+## Geramos o arquivo arquivo_palavra.yap no script c
+
+## CONECTA NO YAP LOADING do ARQUIVO
+yap -l arquivo_palavra.yap
+## Dentro do yap
+actor(X,Y,Z). » por ordem, lçista um de cada vez- para o proximo, bota ";"
+## para encontrar todos
+findall((X,Y,Z),actor(X,Y,Z),L).
+
+
+##EXTENSIONAL ( vem do banco )
+rental('2005-08-23 22:06:34','655','502','2005-08-29 18:44:34','1').
+## INTENSIONAL ( regras criadas por mim) -- adicionamos no final do arquivo yap essa regra
+actor_of_action(Y,Z):-actor(X,Y,Z),film(F,I,_,_,_,_,_,_,_),category(I,'Action'),film_actor(X,F).
+
+## PARA CONSUILTAR ESSA regras NO yap
+all((Y,Z),actor_of_action(Y,Z),L).
