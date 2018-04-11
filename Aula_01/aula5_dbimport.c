@@ -131,6 +131,11 @@ db_connect(localhost,guest,'',dvds,CONN), db_query(CONN,'SELECT * FROM film_acto
 
 
 
+db_connect(localhost,guest,'',dvds,CONN),
+db_assert(CONN,'film_actor',4)
+
+
+
 Em CONN é guardado um ponteiro de memória com a conexao
 CONN = 1041571208
 
