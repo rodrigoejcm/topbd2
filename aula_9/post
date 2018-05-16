@@ -1,0 +1,86 @@
+# list all BDS
+
+\list or \l: list all databases
+\dt: list all tables in the current database
+
+#USE DB
+\connect database_name
+
+
+# select * from taxi_stands limit 30;
+
+# insert into taxi_stands values (200,'Aeroporto', st_geomfromtext('point(-8.577148 41.242288)', 4326));
+# update taxi_stands set location =  st_geomfromtext('point(-8.670025 41.237124)', 4326) where id = 200;
+
+
+# SELECT COUNT(*) FROM taxi_services,taxi_stands WHERE taxi_stands.name = 'Aeroporto'
+# AND ST_distanceSphere( taxi_services.final_point,taxi_stands.location) < 150;
+
+
+
+# SELECT COUNT(*) FROM taxi_services,taxi_stands WHERE taxi_stands.name = 'Campanha'
+# AND ST_distanceSphere( taxi_services.final_point,taxi_stands.location) < 150;
+
+# 10 pontos relevantes de mobilidade na cidade
+
+## BCCC
+#### https://giswiki.hsr.ch/PostGIS-Beispiele
+
+
+## “What is the total length of all roads in the province, in kilometers?”
+## select sum(st_length(geom))/1000 from bc_roads;
+
+## ”How large is the city of Prince George, in hectares?”
+
+
+SELECT ST_Area(geom) FROM bc_municipality where name = 'Prince George';
+SELECT ST_Area(geom)*0.000009290304  FROM bc_municipality where name = 'PRINCE GEORGE';
+
+
+# COLUNAS
+SELECT *FROM information_schema.columns WHERE table_schema = 'public' AND table_name   = 'bc_roads';
+
+# SELECT *  FROM bc_municipality where bc_municipality.name like 'George%';
+
+
+SELECT bc_municipality.name FROM bc_municipality ;
+
+
+
+### ”What is the largest municipality in the province, by area?”
+
+SELECT ST_Area(geom),name FROM bc_municipality order by 1 limit 1;
+
+## “What is the perimeter of the municipality of Vancouver?”
+
+
+SELECT ST_Perimeter(geom),name  FROM bc_municipality where name = 'VANCOUVER';
+
+####”What is the total area of all voting areas in hectares?”
+
+SELECT sum(ST_Area(geom)) FROM bc_voting_areas;
+SELECT ST_Area(geom),code FROM bc_voting_areas;
+
+
+“What is the total area of all voting areas with more than 100 voters in them?”
+
+SELECT sum(ST_Area(geom)) FROM bc_voting_areas where id in (SELECT id from bc_voting_areas where vtotal <= 100 );
+
+
+
+”What is the length in kilometers of all roads named ‘Douglas St’?”
+
+select sum(st_length(geom))/1000 from bc_roads where name like '%Douglas St%';
+select sum(st_length(geom))/1000 from bc_roads where name like 'Douglas St';
+
+
+“How many BC Unity Party supporters live within 2 kilometers of the Tabor Arms pub in Prince George?”
+select sum(unity) from bc_voting_areas where ST_DWithin(SELECT geom from bc_pubs pb where name = 'Tabor Arms Pub Ltd.');
+
+select sum(unity) from bc_voting_areas vc where
+ST_DWithin(vc.geom,
+            (SELECT pb.geom from bc_pubs pb where name = 'Tabor Arms Pub Ltd.'),
+              1.24274238);
+
+
+SELECT name from dc_pubs where name = 'Tabor Arms Pub Ltd.';
