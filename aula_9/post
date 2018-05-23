@@ -1,3 +1,8 @@
+#conectar
+psql -U guest -W guest
+
+senha guest
+
 # list all BDS
 
 \list or \l: list all databases

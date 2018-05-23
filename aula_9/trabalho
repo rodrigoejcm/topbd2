@@ -1,0 +1,30 @@
+http://www.postgresonline.com/journal/archives/3-Converting-from-Unix-Timestamp-to-PostgreSQL-Timestamp-or-Date.html
+
+sistemas decoordenadas - 3763
+
+pg2sql -s 3763:4326
+do sistema original para
+
+
+CREATE TABLE conv (
+  inicial TIMESTAMP,
+  final TIMESTAMP,
+  duracao TIMESTAMP
+  
+);
+
+INSERT INTO conv (inicial,final)
+(SELECT TIMESTAMP 'epoch' + initial_ts * INTERVAL '1 second' as real_date_initial, TIMESTAMP 'epoch' + final_ts * INTERVAL '1 second' as real_date_final FROM taxi_services limit 10);
+
+INSERT INTO conv (duracao)
+(SELECT EXTRACT( EPOCH from (final-inicial))/60 from conv)
+
+
+
+
+ALTER TABLE conv
+DROP COLUMN duracao;
+
+
+ALTER TABLE conv
+ADD COLUMN duracao real;
